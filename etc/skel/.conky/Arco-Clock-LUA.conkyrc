@@ -136,7 +136,7 @@ conky.config = {
 
 
 	--Lua
-	lua_load = '~/.config/conky/lua/clock.lua',
+	lua_load = '~/.conky/lua/clock.lua',
 	lua_draw_hook_pre = 'draw_clock',
 
 };

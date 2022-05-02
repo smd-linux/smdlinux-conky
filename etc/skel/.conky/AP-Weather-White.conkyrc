@@ -128,7 +128,7 @@ color2="ffffff",  --  white
 -------------------------------------
 --  Icon Sources
 -------------------------------------
-template0="~/.config/conky/images/weather-icons/64px-white",
+template0="~/.conky/images/weather-icons/64px-white",
 
 
 -------------------------------------

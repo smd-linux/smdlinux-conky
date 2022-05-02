@@ -1,0 +1,137 @@
+# .conkyrc by fabsh <fabsh@lamerk.org>
+# Based on ideas and code from the CunchBang Linux forums at http://crunchbanglinux.org
+# v. 1.0
+
+# Use Xft?
+use_xft yes
+xftfont DejaVu Sans:size=8
+xftalpha 0.8
+text_buffer_size 2048
+
+# Update interval in seconds
+update_interval 4
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+#own_window yes
+#own_window_transparent yes
+##own_window_type override
+#own_window_type desktop
+##own_window_type normal #use this if you want a nice shadow to appear around conky
+
+own_window yes
+own_window_type desktop
+own_window_transparent yes
+own_window_hints undecorated,sticky,skip_taskbar,skip_pager,below
+own_window_argb_value 0
+own_window_argb_visual yes
+own_window_colour 000000
+
+# If own_window is yes, these window manager hints may be used
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 200 0
+maximum_width 200
+
+# Draw shades?
+draw_shades no
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 0
+
+# border margins
+border_margin 5
+
+# border width
+border_width 1
+
+# Default colors and also border colors
+default_color black
+#default_shade_color black
+#default_outline_color grey
+#own_window_colour grey
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 12
+gap_y 12
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# Add spaces to keep things from moving about? This only affects certain objects.
+use_spacer none
+
+temperature_unit celcius
+
+TEXT
+${voffset 26}SYSTEM ${hr 2}
+${alignc +15}${font Arial Black:size=14}${nodename}${font}
+${alignc 0}Lenovo Laptop
+${font OpenLogos:size=16}u${font} Kernel: ${alignr}${kernel}
+${font StyleBats:size=16}A${font} CPU1: ${cpu cpu1}% ${alignr}${cpubar cpu1 8,60}
+${font StyleBats:size=16}A${font} CPU2: ${cpu cpu2}% ${alignr}${cpubar cpu2 8,60}
+${font StyleBats:size=16}g${font} RAM: $memperc% ${alignr}${membar 8,60}
+${font StyleBats:size=16}j${font} SWAP: $swapperc% ${alignr}${swapbar 8,60}
+${font StyleBats:size=16}u${font} Battery: ${battery_percent BAT1}% ${alignr}${battery_bar 8,60 BAT1}
+${font StyleBats:size=16}q${font} Uptime: ${alignr}${uptime}
+
+DATE ${hr 2}
+${alignc 19}${font Arial Black:size=18}${time %H:%M}${font}
+${voffset 2}${alignc}${time %A, %d %B %Y}
+
+WEATHER ${hr 2}
+${if_existing /proc/net/route wlan0}
+${voffset -15}${execi 500 bash $HOME/.conky/scripts/accuweather/accuw_script}
+${voffset +5}${goto 100}${font Arial Black:size=25}${execpi 600 sed -n '4p' $HOME/.conky/scripts/accuweather/curr_cond}°C${voffset -5}${goto 5}${font conkyweather:size=50}${execpi 600 sed -n '2p' $HOME/.conky/scripts/accuweather/curr_cond}${font Arial Black:size=18}${voffset -14}${goto 120}${voffset 30}${goto 185}${font conkyweather:size=30}${voffset 20}${goto 5}${execpi 600 sed -n '7p' $HOME/.conky/scripts/accuweather/tod_ton}${goto 75}${execpi 600 sed -n '12p' $HOME/.conky/scripts/accuweather/tod_ton}${goto 150}${execpi 600 sed -n '17p' $HOME/.conky/scripts/accuweather/tod_ton}${voffset 12}${goto 5}${font Arial Black:size=10}${execpi 600 sed -n '9p' $HOME/.conky/scripts/accuweather/tod_ton}°/${execpi 600 sed -n '10p' $HOME/.conky/scripts/accuweather/tod_ton}°${goto 75}${execpi 600 sed -n '14p' $HOME/.conky/scripts/accuweather/tod_ton}°/${execpi 600 sed -n '15p' $HOME/.conky/scripts/accuweather/tod_ton}°${goto 150}${execpi 600 sed -n '19p' $HOME/.conky/scripts/accuweather/tod_ton}°/${execpi 600 sed -n '20p' $HOME/.conky/scripts/accuweather/tod_ton}°${voffset 12}${goto 8}${font Arial Black:size=10}${execpi 600 sed -n '6p' $HOME/.conky/scripts/accuweather/tod_ton}${goto 78}${execpi 600 sed -n '11p' $HOME/.conky/scripts/accuweather/tod_ton}${goto 155}${execpi 600 sed -n '16p' $HOME/.conky/scripts/accuweather/tod_ton}${font}
+
+
+
+${voffset -30}HD ${hr 2}
+${execpi 10 df | df | sed '/none/d' | sed '/udev/d' | sed '/tmpfs/d' | sed 1d | cut -d% -f2 | while read line ; do
+if [ $line = "/" ]
+then echo '${voffset 5}${font Modern Pictograms:size=24}C${font} ${voffset -10}${alignr}${fs_bar 8,60 '$line'} \n ${alignr}${fs_used '$line'}/${fs_size '$line'} '
+else echo '${voffset 5}${font Modern Pictograms:size=24}Q${font} ${voffset -10}${alignr}${fs_bar 8,60 '$line'} \n ${alignr}${fs_used '$line'}/${fs_size '$line'} '
+fi
+done }
+
+${voffset -10}NETWORK ${hr 2}
+${if_existing /proc/net/route wlan0}
+${voffset -6}${font PizzaDude Bullets:size=14}O${font} Up: ${upspeed wlan0}${alignr}${upspeedgraph wlan0 8,60 black black}
+${voffset 4}${font PizzaDude Bullets:size=14}U${font} Down: ${downspeed wlan0}${alignr}${downspeedgraph wlan0 8,60 black black}
+${voffset 4}${font PizzaDude Bullets:size=14}N${font} Upload: ${alignr}${totalup wlan0}
+${voffset 4}${font PizzaDude Bullets:size=14}T${font} Download: ${alignr}${totaldown wlan0}
+
+

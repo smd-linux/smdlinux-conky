@@ -136,7 +136,7 @@ conky.config = {
 
 
 conky.text = [[
-${image ~/.config/conky/images/archlinux-100x100.png -p 170,0 -s 50x50}
+${image ~/.conky/images/archlinux-100x100.png -p 170,0 -s 50x50}
 
 ${color1}${font SourceSansPro-ExtraLight:size=18:weight:bold}${color2}${execi 6000 lsb_release -d | grep 'Descr'|awk {'print $2 " " $3" " $4" " $5'}}
 ${color1}${hr 2}

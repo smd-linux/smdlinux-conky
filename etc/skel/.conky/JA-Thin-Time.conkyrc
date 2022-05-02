@@ -130,7 +130,7 @@ conky.config = {
 	color9 = '#F1544B',  --firebrick
 
 	--Lua
-	lua_load = '~/.config/conky/lua/time.lua',
+	lua_load = '~/.conky/lua/time.lua',
 
 };
 

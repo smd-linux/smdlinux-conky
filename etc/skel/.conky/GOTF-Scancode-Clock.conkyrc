@@ -35,7 +35,7 @@
 # FONTS FOR THIS CONKY
 # We are free to use the font.
 # Install Paskowy.ttf.
-# It is located in the ~/.config/conky/fonts folder
+# It is located in the ~/.conky/fonts folder
 # Reboot to load the new font and/or restart the conky.
 #=====================================================================================
 

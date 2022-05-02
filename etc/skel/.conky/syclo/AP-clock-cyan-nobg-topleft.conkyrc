@@ -186,7 +186,7 @@ ${color0} ${execi 300 LANG=${template9} LC_TIME=${template9} date +"%d"}${color}
 
 ${goto 24}\
 ${font Roboto:Light:pixelsize=12}\
-${image ~/.config/conky/syclo/images/cyan/hdd.png -p 15,158 -s 16x16} ${offset 14}${fs_used /} / ${fs_size /}\
-${offset 30}${image ~/.config/conky/syclo/images/cyan/ram.png -p 125,158 -s 16x16} ${offset 9}$mem / $memmax\
-${offset 30}${image ~/.config/conky/syclo/images/cyan/cpu.png -p 240,158 -s 16x16} ${offset 9}${cpu cpu0}%
+${image ~/.conky/syclo/images/cyan/hdd.png -p 15,158 -s 16x16} ${offset 14}${fs_used /} / ${fs_size /}\
+${offset 30}${image ~/.conky/syclo/images/cyan/ram.png -p 125,158 -s 16x16} ${offset 9}$mem / $memmax\
+${offset 30}${image ~/.conky/syclo/images/cyan/cpu.png -p 240,158 -s 16x16} ${offset 9}${cpu cpu0}%
 ]];

@@ -1,0 +1,330 @@
+#!/bin/bash
+
+#function: test_image_day
+test_image_day () {
+    case $1 in
+         1)
+           echo a
+         ;;
+         2)
+           echo b 
+         ;;
+         3)
+           echo c
+         ;;
+        4)
+           echo c
+         ;;
+         5)
+           echo d
+         ;;
+         6)
+           echo d
+         ;;
+         7)
+           echo e
+         ;;
+         8)
+           echo f
+         ;;
+         11)
+           echo 0
+         ;;
+         12)
+           echo h
+         ;;
+         13)
+           echo g
+         ;;
+         14)
+           echo g
+         ;;
+         15)
+           echo l
+         ;;
+         16)
+           echo k
+         ;;
+         17)
+           echo k
+         ;;
+         18)
+           echo i
+         ;;
+         19)
+           echo p
+         ;;
+         20)
+           echo o
+         ;;
+         21)
+           echo o
+         ;;
+         22)
+           echo q
+         ;;
+         23)
+           echo o
+         ;;
+         24)
+           echo r
+         ;;
+         25)
+           echo u
+         ;;
+         26)
+           echo v
+         ;;
+         29)
+           echo x
+         ;;
+         30)
+           echo 5
+         ;;
+         31)
+           echo E
+         ;;
+         32)
+           echo 6
+         ;;
+         33)
+           echo A
+         ;;
+         34)
+           echo B
+         ;;
+         35)
+           echo B
+         ;;
+         36)
+           echo C
+         ;;
+         37)
+           echo C
+         ;;
+         38)
+           echo D
+         ;;
+         39)
+           echo G
+         ;;
+         40)
+           echo G
+         ;;
+         41)
+           echo G
+         ;;
+         42)
+           echo G
+         ;;
+         43)
+           echo O
+         ;;
+         44)
+           echo O
+         ;;
+        esac
+} 
+
+#function: test_image_night
+test_image_night () {
+    case $1 in
+         1)
+           echo a
+         ;;
+         2)
+           echo b 
+         ;;
+         3)
+           echo c
+         ;;
+        4)
+           echo c
+         ;;
+         5)
+           echo d
+         ;;
+         6)
+           echo d
+         ;;
+         7)
+           echo e
+         ;;
+         8)
+           echo f
+         ;;
+         11)
+           echo 0
+         ;;
+         12)
+           echo h
+         ;;
+         13)
+           echo g
+         ;;
+         14)
+           echo g
+         ;;
+         15)
+           echo l
+         ;;
+         16)
+           echo k
+         ;;
+         17)
+           echo k
+         ;;
+         18)
+           echo i
+         ;;
+         19)
+           echo p
+         ;;
+         20)
+           echo o
+         ;;
+         21)
+           echo o
+         ;;
+         22)
+           echo q
+         ;;
+         23)
+           echo o
+         ;;
+         24)
+           echo r
+         ;;
+         25)
+           echo u
+         ;;
+         26)
+           echo v
+         ;;
+         29)
+           echo x
+         ;;
+         30)
+           echo 5
+         ;;
+         31)
+           echo E
+         ;;
+         32)
+           echo 6
+         ;;
+         33)
+           echo A
+         ;;
+         34)
+           echo B
+         ;;
+         35)
+           echo B
+         ;;
+         36)
+           echo C
+         ;;
+         37)
+           echo C
+         ;;
+         38)
+           echo D
+         ;;
+         39)
+           echo G
+         ;;
+         40)
+           echo G
+         ;;
+         41)
+           echo G
+         ;;
+         42)
+           echo G
+         ;;
+         43)
+           echo O
+         ;;
+         44)
+           echo O
+         ;;
+        esac
+} 
+
+killall wget
+
+#put your Accuweather address here
+address="http://www.accuweather.com/en/gr/athina/182536/weather-forecast/182536"
+
+loc_id=$(echo $address|sed 's/\/weather-forecast.*$//'|sed 's/^.*\///')
+last_number=$(echo $address|sed 's/^.*\///')
+
+curr_addr="$(echo $address|sed 's/weather-forecast.*$//')"current-weather/"$last_number"
+wget -O $HOME/.weather/accuweather/curr_cond_raw "$curr_addr"
+
+addr1="$(echo $address|sed 's/weather-forecast.*$//')"daily-weather-forecast/"$last_number"
+wget -O $HOME/.weather/accuweather/tod_ton_raw "$addr1"
+
+addr2="$addr1"?day=6
+wget -O $HOME/.weather/accuweather/last_days_raw "$addr2"
+
+#current conditions
+if [[ -s $HOME/.weather/accuweather/curr_cond_raw ]]; then
+
+    sed -i '/detail-now/,/#details/!d' $HOME/.weather/accuweather/curr_cond_raw
+    egrep -i '"cond"|icon i-|detail-tab-panel' $HOME/.weather/accuweather/curr_cond_raw > $HOME/.weather/accuweather/curr_cond
+    sed -i -e 's/^.*detail-tab-panel //g' -e 's/^.*icon i-//g' -e 's/"><\/div>.*$//g' $HOME/.weather/accuweather/curr_cond
+    sed -i -e 's/^.*"cond">//g' -e 's/&deg/\n/g' -e 's/<\/span>.*"temp">/\n/g' -e 's/<.*>//g' $HOME/.weather/accuweather/curr_cond
+    sed -i -e 's/">//g' -e s/-[^-]*$// -e 's/-->//g' -e 's/\r$//g' -e 's/ i-alarm.*$//g' $HOME/.weather/accuweather/curr_cond
+	time=$(sed -n 1p $HOME/.weather/accuweather/curr_cond)
+    image=$(sed -n 2p $HOME/.weather/accuweather/curr_cond)
+	if [[ $time == day ]]; then
+	    sed -i 2s/$image/$(test_image_day $image)/ $HOME/.weather/accuweather/curr_cond
+	elif [[ $time == night ]]; then
+	    sed -i 2s/$image/$(test_image_night $image)/ $HOME/.weather/accuweather/curr_cond
+	fi
+
+fi
+
+#First 5 days
+if [[ -s $HOME/.weather/accuweather/tod_ton_raw ]]; then
+
+    sed -i '/feed-tabs/,/\.feed-tabs/!d' $HOME/.weather/accuweather/tod_ton_raw
+    egrep -i 'Early AM|Today|Tonight|Overnight|icon i-|cond|temp|Mon|Tue|Wed|Thu|Fri|Sat|Sun' $HOME/.weather/accuweather/tod_ton_raw > $HOME/.weather/accuweather/tod_ton
+    sed -i -e 's/^.*#">//g' -e 's/^.*icon i-//g' -e 's/^.*cond">//g' -e 's/^.*temp">//g' $HOME/.weather/accuweather/tod_ton
+    sed -i -e 's/Lo<\/span> /\n/g' -e 's/<\/a>.*$//g' -e 's/-s "><.*$//g' -e 's/&#.*$//g' -e 's/teo//g' $HOME/.weather/accuweather/tod_ton
+    sed -i -e 's/<span>.*$//g' -e 's/<\/span>//g' -e 's/\r$//g' -e 's/ i-alarm.*$//g' $HOME/.weather/accuweather/tod_ton
+	sed -i -e 's/Early AM/EARLY AM/' -e 's/Today/TODAY/' -e 's/Tonight/TONIGHT/' -e 's/Overnight/OVERNIGHT/' -e 's/Mon/MON/' -e 's/Tue/TUE/' -e 's/Wed/WED/' -e 's/Thu/THU/' -e 's/Fri/FRI/' -e 's/Sat/SAT/' -e 's/Sun/SUN/' $HOME/.weather/accuweather/tod_ton
+    time=$(sed -n 1p $HOME/.weather/accuweather/tod_ton)
+    image=$(sed -n 2p $HOME/.weather/accuweather/tod_ton)
+	if [[ $time == TODAY ]]; then
+	    sed -i 2s/$image/$(test_image_day $image)/ $HOME/.weather/accuweather/tod_ton
+	elif [[ $time == TONIGHT || $time == OVERNIGHT || $time == "EARLY AM" ]]; then
+	    sed -i 2s/$image/$(test_image_night $image)/ $HOME/.weather/accuweather/tod_ton
+        sed -i 3a- $HOME/.weather/accuweather/tod_ton
+	fi
+    for (( i=7; i<=22; i+=5 ))
+	  do
+          image=$(sed -n "${i}"p $HOME/.weather/accuweather/tod_ton)
+	      sed -i ${i}s/$image/$(test_image_day $image)/ $HOME/.weather/accuweather/tod_ton
+	  done
+
+fi
+
+#Next 5 days
+if [[ -s $HOME/.weather/accuweather/last_days_raw ]]; then
+
+    sed -i '/feed-tabs/,/\.feed-tabs/!d' $HOME/.weather/accuweather/last_days_raw
+    egrep -i 'icon i-|cond|temp|Lun|Mar|Mer|Gio|Ven|Sab|Dom' $HOME/.weather/accuweather/last_days_raw > $HOME/.weather/accuweather/last_days
+    sed -i -e 's/^.*#">//g' -e 's/^.*icon i-//g' -e 's/^.*cond">//g' -e 's/^.*temp">//g' $HOME/.weather//accuweather/last_days
+    sed -i -e 's/Lo<\/span> /\n/g' -e 's/<\/a>.*$//g' -e 's/-s "><.*$//g' -e 's/&#.*$//g' -e 's/teo//g' $HOME/.weather/accuweather/last_days
+    sed -i -e 's/<span>.*$//g' -e 's/<\/span>//g' -e 's/\r$//g' -e 's/ i-alarm.*$//g' $HOME/.weather/accuweather/last_days
+	sed -i -e 's/Lun/LUN/' -e 's/Mar/MAR/' -e 's/Mer/MER/' -e 's/Gio/GIO/' -e 's/Ven/VEN/' -e 's/Sab/SAB/' -e 's/Dom/DOM/' $HOME/.weather/accuweather/last_days
+    for (( i=2; i<=22; i+=5 ))
+	  do
+          image=$(sed -n "${i}"p $HOME/.weather/accuweather/last_days)
+	      sed -i ${i}s/$image/$(test_image_day $image)/ $HOME/.weather/accuweather/last_days
+	  done
+
+fi

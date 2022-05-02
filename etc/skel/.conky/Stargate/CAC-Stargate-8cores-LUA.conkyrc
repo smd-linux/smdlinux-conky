@@ -58,13 +58,13 @@ no_buffers yes # Subtract (file system) buffers from used memory?
 
 # Lua Load
 ############################
-lua_load $HOME/.config/conky/Stargate/stargate.lua
+lua_load $HOME/.conky/Stargate/stargate.lua
 lua_draw_hook_pre clock_rings
 ################################################################3
 TEXT
 ## Background Image
 ${lua stargate_bgAndRings}
-${image $HOME/.config/conky/Stargate/StargateWidgetBackground.png -p 0,0 -s 707x512}
+${image $HOME/.conky/Stargate/StargateWidgetBackground.png -p 0,0 -s 707x512}
 
 # Date and Time
 ${voffset -38}${goto 470}${utime %D %H:%M:%S}

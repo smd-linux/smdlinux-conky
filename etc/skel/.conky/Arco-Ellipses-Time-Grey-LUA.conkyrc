@@ -139,13 +139,13 @@ conky.config = {
 
 
 	--Lua
-	lua_load = '$HOME/.config/conky/lua/clock-dots-grey.lua',
+	lua_load = '$HOME/.conky/lua/clock-dots-grey.lua',
 	lua_draw_hook_pre = 'draw_clock',
 
 };
 
 conky.text = [[
-#${image $HOME/.config/conky/images/arcolinux-200x200.png -s 150x150}
+#${image $HOME/.conky/images/arcolinux-200x200.png -s 150x150}
 ${voffset 100}${alignr}${time %d}
 ${alignr}${time %B}
 ${alignr}${time %A}

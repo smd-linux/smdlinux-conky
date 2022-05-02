@@ -135,7 +135,7 @@ conky.config = {
 	color9 = '#F1544B',  --firebrick
 
 	--Lua
-	lua_load = '~/.config/conky/lua/bars.lua',
+	lua_load = '~/.conky/lua/bars.lua',
 	lua_draw_hook_pre = 'main_bars',
 };
 

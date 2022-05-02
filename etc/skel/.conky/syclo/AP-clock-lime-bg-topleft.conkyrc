@@ -167,7 +167,7 @@ update_interval = 1,
 };
 
 conky.text = [[
-${image ~/.config/conky/syclo/images/bg/bg-topleft.png -p 0,0 -s 380x240}\
+${image ~/.conky/syclo/images/bg/bg-topleft.png -p 0,0 -s 380x240}\
 ${goto 20}${font Roboto:Light:size=72}${color0}\
 ${time %H}${color}\
 \
@@ -187,7 +187,7 @@ ${color0} ${execi 300 LANG=${template9} LC_TIME=${template9} date +"%d"}${color}
 
 ${goto 24}\
 ${font Roboto:Light:pixelsize=12}\
-${image ~/.config/conky/syclo/images/lime/hdd.png -p 15,158 -s 16x16} ${offset 14}${fs_used /} / ${fs_size /}\
-${offset 30}${image ~/.config/conky/syclo/images/lime/ram.png -p 125,158 -s 16x16} ${offset 9}$mem / $memmax\
-${offset 30}${image ~/.config/conky/syclo/images/lime/cpu.png -p 240,158 -s 16x16} ${offset 9}${cpu cpu0}%
+${image ~/.conky/syclo/images/lime/hdd.png -p 15,158 -s 16x16} ${offset 14}${fs_used /} / ${fs_size /}\
+${offset 30}${image ~/.conky/syclo/images/lime/ram.png -p 125,158 -s 16x16} ${offset 9}$mem / $memmax\
+${offset 30}${image ~/.conky/syclo/images/lime/cpu.png -p 240,158 -s 16x16} ${offset 9}${cpu cpu0}%
 ]];

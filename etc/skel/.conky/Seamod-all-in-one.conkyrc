@@ -1,0 +1,178 @@
+--[[
+#==============================================================================
+#                               All in one
+#By Husam2005
+#Based on Conky Seamod v0.1 by ~SeaJey & Conky in Google Now Style.
+#Edited by Seth Dawson
+#==============================================================================
+
+]]
+
+conky.config = {
+
+	-------------------------------------
+	--  Generic Settings
+	-------------------------------------
+
+	background = true,
+	cpu_avg_samples= 1,
+	diskio_avg_samples = 10,
+	double_buffer = true,
+	if_up_strictness = 'address',			-- added this one
+	net_avg_samples = 2,
+	no_buffers = true,
+	temperature_unit = celsius,
+	text_buffer_size = 2048,
+	update_interval = 1,
+
+	-------------------------------------
+	--  Placement
+	-------------------------------------
+	alignment = 'top_right',
+	gap_x = 12,
+	gap_y = 30,
+	minimum_height = 900,
+	minimum_width = 300,
+	maximum_width = 350,
+
+	-------------------------------------
+	--  Graphical
+	-------------------------------------
+
+	border_inner_margin = 0,
+	border_outer_margin = 0,
+	border_width = 0,
+	draw_borders = false,
+	draw_graph_borders= false,
+	draw_shades = false,
+	draw_outline= false,
+
+	-------------------------------------
+	--  Textual
+	-------------------------------------
+
+	extra_newline = false,						-- added
+	format_human_readable = true,				-- added
+	font = 'AvantGarde LT Medium:size=40',	-- added
+	max_text_width = 0,							-- added
+	max_user_text = 16384,						-- added
+	override_utf8_locale = true,
+	short_units = true,							-- added
+	uppercase = false,
+	use_xft = true,
+	xftalpha = 0.5,
+	xftfont = "caviar dreams:size=10",
+
+	-------------------------------------
+	--  Windows
+	-------------------------------------
+
+	own_window = true,
+	own_window_argb_value = 0,
+	own_window_argb_visual = true,
+	own_window_class = 'Conky',
+	own_window_colour = '#000000',
+	own_window_hints = "undecorate,sticky,skip_taskbar,skip_pager,below",
+	own_window_transparent = true,
+	own_window_title = 'system_conky',
+	own_window_type = 'desktop',
+
+	-------------------------------------
+	--  Color Scheme
+	-------------------------------------
+	default_color = '#FFFFFF',
+	color1 = '#DDDDDD',
+	color2 = '#AAAAAA',
+	color3 = '#888888',
+	color4 = '#ff6155',
+	color5 = '#55d448',
+
+	-------------------------------------
+	--  API Key
+	--  To get API Key, first you have to sign up here https://openweathermap.org/appid
+	-------------------------------------
+	template6 = '{Enter API Key}',
+
+	-------------------------------------
+	--  City ID
+	--  Find your City ID here https://openweathermap.org/city
+	-------------------------------------
+	template4 = '{Enter Latitude}',			-- lat
+	template5 = '{Enter Longitude}',			-- lon
+	template7 = '{Enter Location ID}',
+
+	-------------------------------------
+	--  Temp Unit (default, metric, imperial)
+	-------------------------------------
+	template8 = 'imperial',
+
+	-------------------------------------
+	--  Locale (e.g. "es_ES.UTF-8")
+	--  Leave empty for default
+	-------------------------------------
+	template9 = '',
+
+	-------------------------------------
+	--  Lua
+	-------------------------------------
+	lua_load = '~/.conky/lua/aio-rings.lua',
+	lua_draw_hook_post = 'main',
+
+};
+
+conky.text = [[
+${voffset 8}${color4} ${time %I} : ${time %M}${font Ubuntu Medium:size=10}${font Ubuntu Medium:size=12}${color5}  ${time %m/%d/%Y}
+${voffset 3}${offset 100}${font Ubuntu Medium:size=10} ${color5}Uptime »${uptime_short}
+${voffset -5}${offset 10}${color4}${hr 2}
+# Showing CPU Graph
+${voffset 15}
+${offset 130}${cpugraph 40,160 111111 77B753}${voffset -25}
+${offset 90}${font Ubuntu:size=12,weight:bold}${color4}CPU
+# Showing TOP 3 CPU-consumers
+${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top name 1}${alignr}${top cpu 1}%
+${offset 105}${font Ubuntu:size=10,weight:normal}${color1}${top name 2}${alignr}${top cpu 2}%
+${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top name 3}${alignr}${top cpu 3}%
+#Showing memory part with TOP 3
+${voffset 15}
+${offset 130}${memgraph 40,160 111111 77B753}${voffset -25}
+${offset 90}${font Ubuntu:size=12,weight:bold}${color4}MEM
+${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top_mem name 1}${alignr}${top_mem mem 1}%
+${offset 105}${font Ubuntu:size=10,weight:normal}${color1}${top_mem name 2}${alignr}${top_mem mem 2}%
+${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top_mem name 3}${alignr}${top_mem mem 3}%
+\
+#weather
+${execi 300 l=${template9}; l=${l%%_*}; curl -s "api.openweathermap.org/data/2.5/onecall?lat=${template4}&lon=${template5}&exclude=current,minutely,hourly,alerts&APPID=${template6}&units=${template8}&lang=$l" -o ~/.cache/forecast.json}\
+\
+${execi 300 l=${template9}; l=${l%%_*}; curl -s "api.openweathermap.org/data/2.5/weather?APPID=${template6}&id=${template7}&cnt=5&units=${template8}&lang=$l" -o ~/.cache/weather.json}\
+${voffset -5}${offset 151}${font Open Sans Light:size=14}${color4}${execi 300 jq ".name" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}
+\
+#temp
+${font Open Sans Light:size=30}${color1}${voffset 10}${offset 151}${execi 300 jq ".main.temp" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
+\
+#Hi Low Today
+${voffset -70}${offset 231}${font Open Sans Light:size=10}${color5}Hi    Low
+${voffset 5}${offset 231}${font Open Sans Light:size=10}${color2}${execi 300 jq ".main.temp_max" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°  ${execi 300 jq ".main.temp_min" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
+\
+#humidity
+${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}Humidity ${color1}${offset 15}${execi 300 jq ".main.humidity" ~/.cache/weather.json | awk '{print int($1+0.5)}'}%
+\
+#wind
+${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}Wind speed ${color1}${execi 300 jq ".wind.speed" ~/.cache/weather.json | awk '{print int($1+0.5)}'} mph
+\
+#weather type
+${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}${execi 300 jq ".weather[0].main" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}
+\
+#Hi Low Tomorrow
+#${offset 231}${font Open Sans Light:size=10}${execi 300 grep "yweather:forecast" ~/.cache/weather.xml | grep -o "high=\"[^\"]*\"" | grep -o "\"[^\"]*\"" | grep -o "[^\"]*" | awk 'NR==2'}°  ${execi 300 grep "yweather:forecast" ~/.cache/weather.xml | grep -o "low=\"[^\"]*\"" | grep -o "\"[^\"]*\"" | grep -o "[^\"]*" | awk 'NR==2'}°
+\
+# Network data WIFI
+${voffset -25}
+${offset 55}${font Ubuntu:size=12,weight:bold}${color4}WIFI
+${voffset 2}${offset 151}${font Open Sans Light:size=10}${color1}${upspeed wlp4s0}${alignr 15}${totalup wlp4s0}
+${voffset 6}${offset 151}${color5}${downspeed wlp4s0}${alignr 15}${totaldown wlp4s0}
+# Network data Ethernet
+#${voffset 37}
+#${offset 55}${font Ubuntu:size=12,weight:bold}${color4}ETH
+#${voffset 4}${offset 151}${font Open Sans Light:size=10}${color1}${upspeed eth0}${alignr 15}${totalup eth0}
+#${voffset 8}${offset 151}${color5}${downspeed eth0}${alignr 15}${totaldown eth0}
+]];

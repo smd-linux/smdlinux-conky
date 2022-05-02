@@ -137,8 +137,8 @@ conky.config = {
 };
 
 conky.text = [[
-${image ~/.config/conky/images/back-tw.png -p 0,0 -s 560x220}
-${voffset 100 }${offset 105 }${font 1942 report:size=14}     Powered By ArcoLinux
+${image ~/.conky/images/back-tw.png -p 0,0 -s 560x220}
+${voffset 100 }${offset 105 }${font 1942 report:size=14}     Powered By ArchLinux
 ${offset 20}${voffset -30}${font 1942 report:size=35}${voffset -50}${color}${time %H:%M}
 ${offset 50}${voffset -10}${font 1942 report:size=14}${time %D}
 

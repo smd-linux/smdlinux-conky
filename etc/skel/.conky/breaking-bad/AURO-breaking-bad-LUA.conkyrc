@@ -92,13 +92,13 @@ color8 FFA300
 ###End Color###
 
 ###Loading lua script###
-lua_load ~/.config/conky/breaking-bad/rings-v1.2.1_breaking_bad.lua
+lua_load ~/.conky/breaking-bad/rings-v1.2.1_breaking_bad.lua
 lua_draw_hook_pre rings-v1.2.1_breaking_bad.lua
 lua_draw_hook_pre main
 ###End Loading Lua###
 
 TEXT
-${image ~/.config/conky/breaking-bad/wallwhite.png -p 10,0 -s 560x385}
+${image ~/.conky/breaking-bad/wallwhite.png -p 10,0 -s 560x385}
 ${voffset -0}${goto 405}${color0}${font Droid Sans Mono:style=bold:italic:size=12}${execi 6000 lsb_release -d | grep 'Descr'|awk {'print $2 " " $3" " $4" " $5'}}${color}}${font}
 ${voffset -20}${goto 40}${color0}${font Droid Sans Mono:style=bold:size=12}${execi 10 sensors | grep 'Core 0' | awk {'print $3'}}${color}${font}
 ${voffset 40}${goto 92}${color0}${font Droid Sans Mono:style=:size=10}CPU1${goto 145}${color0}${font Droid Sans Mono:style=normal:size=10}CPU2${color}${font}
