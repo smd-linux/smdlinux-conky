@@ -53,7 +53,8 @@ conky.config = {
 
 	extra_newline = false,						-- added
 	format_human_readable = true,				-- added
-	font = 'AvantGarde LT Medium:size=40',	-- added
+	-- font = 'AvantGarde LT Medium:size=40',
+	font = 'Ubuntu:size=10',
 	max_text_width = 0,							-- added
 	max_user_text = 16384,						-- added
 	override_utf8_locale = true,
@@ -61,7 +62,7 @@ conky.config = {
 	uppercase = false,
 	use_xft = true,
 	xftalpha = 0.5,
-	xftfont = "caviar dreams:size=10",
+	xftfont = "Ubuntu:size=10",
 
 	-------------------------------------
 	--  Windows
@@ -91,15 +92,15 @@ conky.config = {
 	--  API Key
 	--  To get API Key, first you have to sign up here https://openweathermap.org/appid
 	-------------------------------------
-	template6 = '{Enter API Key}',
+	template6 = '{API KEY HERE}',
 
 	-------------------------------------
 	--  City ID
 	--  Find your City ID here https://openweathermap.org/city
 	-------------------------------------
-	template4 = '{Enter Latitude}',			-- lat
-	template5 = '{Enter Longitude}',			-- lon
-	template7 = '{Enter Location ID}',
+	template4 = '{Latitude}',			-- lat
+	template5 = '{Longitude}',			-- lon
+	template7 = '{Location ID}',
 
 	-------------------------------------
 	--  Temp Unit (default, metric, imperial)
@@ -121,58 +122,55 @@ conky.config = {
 };
 
 conky.text = [[
-${voffset 8}${color4} ${time %I} : ${time %M}${font Ubuntu Medium:size=10}${font Ubuntu Medium:size=12}${color5}  ${time %m/%d/%Y}
-${voffset 3}${offset 100}${font Ubuntu Medium:size=10} ${color5}Uptime »${uptime_short}
-${voffset -5}${offset 10}${color4}${hr 2}
+${voffset 8}${color4}${font Ubuntu:Semibold:size=40} ${time %I} : ${time %M}${font}${font Ubuntu:Semibold:size=10}${font Ubuntu:Semibold:size=12}${color5}  ${time %m/%d/%Y}${font}
+${voffset 3}${offset 100}${font Ubuntu:Semibold:size=10} ${color5}Uptime »${uptime_short}
+${voffset -5}${offset 10}${color4}${hr 2}${font}
 # Showing CPU Graph
 ${voffset 15}
-${offset 130}${cpugraph 40,160 111111 77B753}${voffset -25}
-${offset 90}${font Ubuntu:size=12,weight:bold}${color4}CPU
+${offset 130}${cpugraph 40,160 111111 77B753}${voffset -20}
+${offset 90}${font Ubuntu:Bold:size=12}${color4}CPU${font}
 # Showing TOP 3 CPU-consumers
-${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top name 1}${alignr}${top cpu 1}%
-${offset 105}${font Ubuntu:size=10,weight:normal}${color1}${top name 2}${alignr}${top cpu 2}%
-${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top name 3}${alignr}${top cpu 3}%
+${offset 105}${color2}${top name 1}${alignr}${top cpu 1}%
+${offset 105}${color1}${top name 2}${alignr}${top cpu 2}%
+${offset 105}${color2}${top name 3}${alignr}${top cpu 3}%
 #Showing memory part with TOP 3
 ${voffset 15}
 ${offset 130}${memgraph 40,160 111111 77B753}${voffset -25}
-${offset 90}${font Ubuntu:size=12,weight:bold}${color4}MEM
-${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top_mem name 1}${alignr}${top_mem mem 1}%
-${offset 105}${font Ubuntu:size=10,weight:normal}${color1}${top_mem name 2}${alignr}${top_mem mem 2}%
-${offset 105}${font Ubuntu:size=10,weight:normal}${color2}${top_mem name 3}${alignr}${top_mem mem 3}%
+${offset 90}${font Ubuntu:Bold:size=12}${color4}MEM${font}
+${offset 105}${color2}${top_mem name 1}${alignr}${top_mem mem 1}%
+${offset 105}${color1}${top_mem name 2}${alignr}${top_mem mem 2}%
+${offset 105}${color2}${top_mem name 3}${alignr}${top_mem mem 3}%
 \
 #weather
 ${execi 300 l=${template9}; l=${l%%_*}; curl -s "api.openweathermap.org/data/2.5/onecall?lat=${template4}&lon=${template5}&exclude=current,minutely,hourly,alerts&APPID=${template6}&units=${template8}&lang=$l" -o ~/.cache/forecast.json}\
 \
 ${execi 300 l=${template9}; l=${l%%_*}; curl -s "api.openweathermap.org/data/2.5/weather?APPID=${template6}&id=${template7}&cnt=5&units=${template8}&lang=$l" -o ~/.cache/weather.json}\
-${voffset -5}${offset 151}${font Open Sans Light:size=14}${color4}${execi 300 jq ".name" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}
+${voffset 5}${offset 151}${font Ubuntu:Semibold:size=14}${color4}${execi 300 jq ".name" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}${font}
 \
 #temp
-${font Open Sans Light:size=30}${color1}${voffset 10}${offset 151}${execi 300 jq ".main.temp" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
+${font Open Sans:Light:size=30}${color1}${voffset 10}${offset 151}${execi 300 jq ".main.temp" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
 \
 #Hi Low Today
-${voffset -70}${offset 231}${font Open Sans Light:size=10}${color5}Hi    Low
-${voffset 5}${offset 231}${font Open Sans Light:size=10}${color2}${execi 300 jq ".main.temp_max" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°  ${execi 300 jq ".main.temp_min" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
+${font}${voffset -70}${offset 231}${color5}Hi    Low
+${voffset 5}${offset 231}${color2}${execi 300 jq ".main.temp_max" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°  ${execi 300 jq ".main.temp_min" ~/.cache/weather.json | awk '{print int($1+0.5)}' # round num}°
 \
 #humidity
-${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}Humidity ${color1}${offset 15}${execi 300 jq ".main.humidity" ~/.cache/weather.json | awk '{print int($1+0.5)}'}%
+${voffset 5}${offset 151}${color4}Humidity ${color1}${offset 15}${execi 300 jq ".main.humidity" ~/.cache/weather.json | awk '{print int($1+0.5)}'}%
 \
 #wind
-${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}Wind speed ${color1}${execi 300 jq ".wind.speed" ~/.cache/weather.json | awk '{print int($1+0.5)}'} mph
+${voffset 5}${offset 151}${color4}Wind speed ${color1}${execi 300 jq ".wind.speed" ~/.cache/weather.json | awk '{print int($1+0.5)}'} mph
 \
 #weather type
-${voffset 5}${offset 151}${font Open Sans Light:size=10}${color4}${execi 300 jq ".weather[0].main" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}
-\
-#Hi Low Tomorrow
-#${offset 231}${font Open Sans Light:size=10}${execi 300 grep "yweather:forecast" ~/.cache/weather.xml | grep -o "high=\"[^\"]*\"" | grep -o "\"[^\"]*\"" | grep -o "[^\"]*" | awk 'NR==2'}°  ${execi 300 grep "yweather:forecast" ~/.cache/weather.xml | grep -o "low=\"[^\"]*\"" | grep -o "\"[^\"]*\"" | grep -o "[^\"]*" | awk 'NR==2'}°
+${voffset 5}${offset 151}${color4}${execi 300 jq ".weather[0].main" ~/.cache/weather.json | awk '{gsub(/[",]/,""); print $1}'}
 \
 # Network data WIFI
-${voffset -25}
-${offset 55}${font Ubuntu:size=12,weight:bold}${color4}WIFI
-${voffset 2}${offset 151}${font Open Sans Light:size=10}${color1}${upspeed wlp4s0}${alignr 15}${totalup wlp4s0}
+${voffset 10}
+${offset 55}${font Ubuntu:Bold:size=12}${color4}WIFI${font}
+${voffset 2}${offset 151}${color1}${upspeed wlp4s0}${alignr 15}${totalup wlp4s0}
 ${voffset 6}${offset 151}${color5}${downspeed wlp4s0}${alignr 15}${totaldown wlp4s0}
 # Network data Ethernet
-#${voffset 37}
-#${offset 55}${font Ubuntu:size=12,weight:bold}${color4}ETH
-#${voffset 4}${offset 151}${font Open Sans Light:size=10}${color1}${upspeed eth0}${alignr 15}${totalup eth0}
-#${voffset 8}${offset 151}${color5}${downspeed eth0}${alignr 15}${totaldown eth0}
+${voffset 50}
+${offset 55}${font Ubuntu:Bold:size=12}${color4}ETH${font}
+${voffset 4}${offset 151}${color1}${upspeed enp3s0}${alignr 15}${totalup enp3s0}
+${voffset 8}${offset 151}${color5}${downspeed enp3s0}${alignr 15}${totaldown enp3s0}
 ]];
