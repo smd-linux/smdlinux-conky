@@ -1,0 +1,127 @@
+conky.config = {
+-- from where does conky start
+alignment = "middle_right",
+xinerama_head = 1,
+
+-- distance from screen edge
+gap_x = 45,
+gap_y = 0,
+
+-- size settings for conky window
+maximum_width = 500,
+minimum_width = 500,
+max_text_width = 0,
+
+-- set conky behavior on screen (adjustable in the color section)
+	-- allows setting own WM_Class. conky is the default
+own_window_class = "conky",
+	-- don"t share the desktop, makes conky its own animal
+own_window = true,
+	-- on some systems does give full transparency, but cannot be adjusted as this setup allows
+own_window_transparent = false,
+	-- necessary to get adjustable transparency
+own_window_argb_visual = true,
+       -- normal, desktop, dock, panel, override
+own_window_type = "normal",
+	--set values for conky behavior
+own_window_hints = "undecorated,sticky,below,skip_taskbar,skip_pager",
+
+-- set border/shading behavior
+default_outline_color = "000000",
+default_shade_color = "000000",
+draw_borders = false,
+border_width = 1,
+stippled_borders = 0,
+draw_graph_borders = false,
+draw_outline = false,
+draw_shades = false,
+border_inner_margin = 10,
+
+-- set special conditions for conky
+out_to_x = true,
+background = true,
+out_to_console = false,
+out_to_stderr = false,
+text_buffer_size = 512,
+total_run_times = 0,
+double_buffer = true,
+update_interval = 2,
+cpu_avg_samples = 3,
+net_avg_samples = 2,
+no_buffers = true,
+short_units = true,
+imlib_cache_size = 512,
+show_graph_scale = false,
+show_graph_range = false,
+format_human_readable = true,
+
+-- Text options
+	-- anti-aliased font use and value = .1 to 1.0
+use_xft = true,
+xftalpha = 0.8,
+	-- Xft font to use
+font = "DejaVuSans:size=9.0",
+	-- UTF8 support required for XFT
+override_utf8_locale = true,
+
+-- START COLORS
+default_color = '5C5442',
+color0 = 'FFFFFF',
+color1 = 'C62E1C',
+color2 = 'F4BE1D',
+color3 = 'FF0000',
+color4 = '66FF00',
+-- END COLORS
+own_window_colour = "000000",
+own_window_argb_value = 0,
+
+lua_load = "$HOME/.conky/smdlinux/lua/draw_bg.lua",
+lua_draw_hook_pre = "draw_bg",
+}
+
+conky.text = [[
+${voffset -17 }${font DejaVuSans:bold:size=10.0}${color1}${voffset 4}
+SYSTEM ${goto 254}${color1}DISK USAGE ${font DejaVuSans:bold:size=9.0}${color0}
+Name ${font}${goto 75}${sysname} ${kernel} ${goto 254}${font DejaVuSans:bold:size=9.0} / ${font}${color0}${goto 355}${fs_used /} / ${fs_size /}${alignr}${fs_used_perc /}%${font DejaVuSans:bold:size=9.0}
+RAM ${font}${goto 75}${mem} / ${memmax}${goto 254}${font DejaVuSans:bold:size=9.0} /media ${font}${goto 355}${fs_used /media/} / ${fs_size /media/}${alignr}${fs_used_perc /media/}%${font DejaVuSans:bold:size=9.0}
+SWAP ${font}${goto 75}${swap} / ${swapmax}${goto 254}${font DejaVuSans:bold:size=9.0} /Timeshift ${font}${goto 355}${fs_used /media/TimeshiftBackup/} / ${fs_size /media/TimeshiftBackup/}${alignr}${fs_used_perc /media/TimeshiftBackup}%${font DejaVuSans:bold:size=9.0}
+Uptime ${font}${goto 75}${uptime}${goto 254}${font DejaVuSans:bold:size=9.0} /Seagate ${font}${goto 355}${fs_used /media/SeagatePortableDrive/} / ${fs_size /media/SeagatePortableDrive/}${alignr}${fs_used_perc /media/SeagatePortableDrive}%${font DejaVuSans:bold:size=10.0}${color1}
+
+CPU${goto 254}NETWORK${color0}${font DejaVuSans:bold:size=6.0}
+${voffset 2}${execi 86400 cat /proc/cpuinfo | grep 'model name' | uniq | sed 's/model name\t: //'}${goto 254}${voffset 2}ISP ${alignr} ${voffset 2}${execpi 10 python $HOME/.conky/smdlinux/scripts/isp.py}${font DejaVuSans:normal:size=9.0}
+Total CPU: ${cpu}%${goto 115}Temp: ${exec sensors | grep 'Tctl:' | awk '{print $2}'}${color0}${goto 254}Locale: ${alignr} ${execpi 10 python $HOME/.conky/smdlinux/scripts/locale.py}
+${color0}${cpubar 20,200}${color0}${goto 254}${font DejaVuSans:normal:size=9.0}${color0}Internal IP - enp5s0${alignr}${addr enp5s0}${font DejaVuSans:normal:size=9.0}
+${goto 254}${voffset -20}Public IP - enp5s0${alignr} ${execpi 10 python $HOME/.conky/smdlinux/scripts/ipaddr.py}
+Core 1: ${if_match ${freq 1}<1000} ${endif}${freq 1} MHz ${goto 254}VPN Status${alignr}${execpi 10 python $HOME/.conky/smdlinux/scripts/vpn.py}${color0}
+${voffset -4}${if_match ${cpu cpu1}<10} ${endif}${cpu cpu1}%  ${color0}${cpubar cpu1 5,170}${goto 254}${voffset 4}State${alignr}${color4} ${if_existing /sys/class/net/enp5s0/operstate up}ONLINE${else}${color3}OFFLINE${endif}${color0}
+Core 2: ${if_match ${freq 2}<1000} ${endif}${freq 2} MHz${goto 260}${font DejaVuSans:bold:size=9.0}Download${font DejaVuSans:normal:size=9.0}
+${voffset -4}${if_match ${cpu cpu2}<10} ${endif}${cpu cpu2}%  ${cpubar cpu2 5,170}${goto 275}${font}${color0}Total - ${totaldown enp5s0}${goto 275}${voffset 16}Speed - ${downspeed enp5s0}${alignr}${voffset -16}${color2}${downspeedgraph enp5s0 20,100 F4BE1D C62E1C scale -t -l}${color0}
+${voffset -16}Core 3: ${if_match ${freq 3}<1000} ${endif}${freq 3} MHz${goto 260}${font DejaVuSans:bold:size=9.0}${voffset 12}Upload${font DejaVuSans:normal:size=9.0}
+${voffset -12}${if_match ${cpu cpu3}<10} ${endif}${cpu cpu3}%  ${cpubar cpu3 5,170}${goto 275}${color0}${voffset 8}Total - ${totalup enp5s0}${color0}${goto 275}${voffset 16}Speed - ${upspeed enp5s0}${alignr}${voffset -16}${color2}${upspeedgraph enp5s0 20,100 F4BE1D C62E1C scale -t -l}${color0}
+${voffset -24}Core 4: ${if_match ${freq 4}<1000} ${endif}${freq 4} MHz
+${voffset -4}${if_match ${cpu cpu4}<10} ${endif}${cpu cpu4}%  ${cpubar cpu4 5,170}
+Core 5: ${if_match ${freq 5}<1000} ${endif}${freq 5} MHz
+${voffset -4}${if_match ${cpu cpu5}<10} ${endif}${cpu cpu5}%  ${cpubar cpu5 5,170}${goto 254}${font DejaVuSans:bold:size=10.0}${color1}PROCESSES${font DejaVuSans:normal:size=9.0}${color0}
+Core 6: ${if_match ${freq 6}<1000} ${endif}${freq 6} MHz${goto 260}${font DejaVuSans:bold:size=9.0}${color0}Name${goto 360}PID${goto 430}CPU${alignr}MEM${font DejaVuSans:normal:size=9.0}
+${voffset -4}${if_match ${cpu cpu6}<10} ${endif}${cpu cpu6}%  ${cpubar cpu6 5,170}${goto 260}${top name 1}${goto 360}${top pid 1}${goto 410}${top cpu 1}%${alignr}${top mem 1}%
+Core 7: ${if_match ${freq 7}<1000} ${endif}${freq 7} MHz${goto 260}${top name 2}${goto 360}${top pid 2}${goto 410}${top cpu 2}%${alignr}${top mem 2}%
+${voffset -4}${if_match ${cpu cpu7}<10} ${endif}${cpu cpu7}%  ${cpubar cpu7 5,170}${goto 260}${top name 3}${goto 360}${top pid 3}${goto 410}${top cpu 3}%${alignr}${top mem 3}%
+Core 8: ${if_match ${freq 8}<1000} ${endif}${freq 8} MHz${goto 260}${top name 4}${goto 360}${top pid 4}${goto 410}${top cpu 4}%${alignr}${top mem 4}%
+${voffset -4}${if_match ${cpu cpu8}<10} ${endif}${cpu cpu8}%  ${cpubar cpu8 5,170}${goto 260}${top name 5}${goto 360}${top pid 5}${goto 410}${top cpu 5}%${alignr}${top mem 5}%
+${cpugraph F4BE1D C62E1C}
+${font DejaVuSans:bold:size=10.0}${voffset 10}${color1}ARCH-LINUX
+${color0}${font}${execpi 600 python3 $HOME/.conky/smdlinux/news/arch-news.py &}
+$font ${voffset -26 }
+
+${font DejaVuSans:bold:size=10.0}${color1}HACKER-NEWS
+${color0}${font}${execpi 600 python $HOME/.conky/smdlinux/news/hackernews.py &}
+$font ${voffset -26 }
+
+${font DejaVuSans:bold:size=10.0}${color1}BLEEPING-COMPUTER
+${color0}${font}${execpi 600 python $HOME/.conky/smdlinux/news/bleepingcomputer.py &}
+$font ${voffset -26 }
+
+${font DejaVuSans:bold:size=10.0}${color1}LINUX-TODAY
+${color0}${font}${execpi 600 python $HOME/.conky/smdlinux/news/linuxtoday.py; sleep 15s}
+${voffset 4}
+${font}${voffset -5 }]];

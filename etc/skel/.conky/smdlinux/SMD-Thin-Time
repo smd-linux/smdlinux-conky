@@ -1,0 +1,65 @@
+conky.config = {
+	background = true,
+	use_xft = true,
+	font = "Roboto:size=9",
+	xftalpha = 0.8,
+	update_interval = 1,
+	total_run_times = 0,
+	own_window_transparent = false,
+	own_window_colour = "000000",
+	own_window = true,
+	own_window_title = "conky",
+	own_window_hints = "undecorated,below,sticky,skip_taskbar,skip_pager",
+	own_window_argb_visual = true,
+	own_window_argb_value = 0,
+	own_window_type = "normal",
+	double_buffer = true,
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = false,
+	stippled_borders = 0,
+	border_margin = 5,
+	border_width = 1,
+	default_color = "000000",
+	default_shade_color = "000000",
+	default_outline_color = "000000",
+	minimum_width = 800,
+	minimum_height = 800,
+	maximum_width = 800,
+	xinerama_head = 1,
+	gap_x = 60,
+	gap_y = 100,
+	alignment = "top_left",
+	no_buffers = true,
+	uppercase = false,
+	cpu_avg_samples = 2,
+	net_avg_samples = 2,
+	short_units = true,
+	text_buffer_size = 2048,
+	use_spacer = false,
+	override_utf8_locale = true,
+
+	--Text settings
+	use_xft = true,
+	xftfont = "TheNautiGal:bold:size=10",
+	
+	lua_load = "$HOME/.conky/smdlinux/lua/time.lua",
+
+	--Color scheme
+	default_color = "white",
+	color1 = "F4BE1D",
+	color2 = "C62E1C",
+	color3 = "EDD077",
+	color4 = "BDBDBD",
+	color5 = "CCCCCC",
+	color6 = "FFFFFF",
+	color7 = "1F7411",
+	color8 = "FFA726",
+	color9 = "F1544B"
+
+}
+
+conky.text = [[
+${offset 55}${color2}${font Helvetica Neue LT Com:size=55}${lua Hour}${color1}${lua Minute}
+]];

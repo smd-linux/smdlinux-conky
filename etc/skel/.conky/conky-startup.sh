@@ -1,9 +1,11 @@
 #!/bin/sh
 
-if [ "$DESKTOP_SESSION" = "xfce" ]; then 
+if [ "$DESKTOP_SESSION" = "plasma" ]; then 
    sleep 20s
    killall conky
-   cd "$HOME/.conky"
-   conky -c "$HOME/.conky/Seamod-all-in-one.conkyrc" &
+   cd "$HOME/.conky/smdlinux"
+   conky -c "$HOME/.conky/smdlinux/SMD-Thin-Time" &
+   cd "$HOME/.conky/smdlinux"
+   conky -c "$HOME/.conky/smdlinux/SMD-news-monitor" &
    exit 0
 fi

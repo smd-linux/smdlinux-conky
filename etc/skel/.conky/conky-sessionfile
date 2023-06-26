@@ -1,1 +1,0 @@
-conky -c /home/seth/.conkyrc & sleep 1s
